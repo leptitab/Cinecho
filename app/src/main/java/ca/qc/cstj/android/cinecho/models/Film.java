@@ -17,8 +17,6 @@ public class Film {
     private String realisateur;
     private String imageUrl;
 
-    public Film() {}
-
     public Film(JsonObject jsonObject) {
         href = jsonObject.getAsJsonPrimitive("href").getAsString();
         titre = jsonObject.getAsJsonPrimitive("titre").getAsString();

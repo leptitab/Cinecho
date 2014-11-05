@@ -12,8 +12,8 @@ import ca.qc.cstj.android.cinecho.models.Film;
  */
 public class FilmAdapter extends GenericArrayAdapter<Film> {
 
-    public FilmAdapter(Context context, int layoutRes, ArrayList<Film> employes) {
-        super(context, layoutRes, employes);
+    public FilmAdapter(Context context, int layoutRes, ArrayList<Film> films) {
+        super(context, layoutRes, films);
     }
 
     @Override

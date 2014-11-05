@@ -1,0 +1,145 @@
+package ca.qc.cstj.android.cinecho;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
+
+import org.apache.http.HttpStatus;
+
+import java.util.ArrayList;
+
+import ca.qc.cstj.android.cinecho.adapters.CinemaAdapter;
+import ca.qc.cstj.android.cinecho.models.Cinema;
+import ca.qc.cstj.android.cinecho.services.ServiceURI;
+
+public class CinemaFragment extends Fragment {
+
+    /**
+     * The fragment argument representing the section number for this
+     * fragment.
+     */
+    private static final String ARG_SECTION_NUMBER = "section_number";
+
+    private ListView lstCinema;
+    private ProgressDialog progressDialog;
+    private CinemaAdapter cinemaAdapter;
+
+
+    /**
+     * Returns a new instance of this fragment for the given section
+     * number.
+     */
+    public static CinemaFragment newInstance(int sectionNumber) {
+        CinemaFragment fragment = new CinemaFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public CinemaFragment() { }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_cinema, container, false);
+
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        lstCinema = (ListView) getActivity().findViewById(R.id.list_cinema);
+
+        /*Ion.with(getActivity())
+           .load(ServicesURI.EMPLOYES_SERVICE_URI)
+           .asJsonArray()
+           .setCallback(new FutureCallback<JsonArray>() {
+               @Override
+               public void onCompleted(Exception e, JsonArray jsonArray) {
+
+                   employeAdapter = new OldEmployeAdapter(getActivity(),
+                                                        getActivity().getLayoutInflater(),jsonArray);
+                   lstEmploye.setAdapter(employeAdapter);
+                   progressDialog.dismiss();
+
+               }
+        });*/
+
+        loadCinemas();
+        //LE LISTENER EST L'EVENT QUI PREND LE CLICK DANS LE MENU POUR FAIRE L'ACTION
+        /*
+        lstCinema.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                String href = cinemaAdapter.getItem(position).getHref();
+
+                FragmentTransaction transaction =  getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,DetailCinemaFragment.newInstance(href))
+                        .addToBackStack("");
+                transaction.commit();
+
+            }
+        });
+        */
+
+    }
+
+    private void loadCinemas()
+    {
+        progressDialog = ProgressDialog.show(getActivity(),"Cinecho","LOADING, BITCH!",true,false);
+
+        Ion.with(getActivity())
+                .load(ServiceURI.CINEMA_SERVICE_URI)
+                .asJsonArray()
+                .withResponse()
+                .setCallback(new FutureCallback<Response<JsonArray>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<JsonArray> jsonArrayResponse) {
+
+                      if(jsonArrayResponse.getHeaders().getResponseCode() == HttpStatus.SC_OK) {
+                            ArrayList<Cinema> cinemas = new ArrayList<Cinema>();
+                            JsonArray jsonArray = jsonArrayResponse.getResult();
+                            for (JsonElement element : jsonArray) {
+                                cinemas.add(new Cinema(element.getAsJsonObject()));
+                            }
+                            cinemaAdapter = new CinemaAdapter(getActivity(), android.R.layout.simple_list_item_1, cinemas);
+                            lstCinema.setAdapter(cinemaAdapter);
+                        }
+                        else {
+                            ArrayList<Cinema> cinemas = new ArrayList<Cinema>();
+                        }
+                        progressDialog.dismiss();
+                    }
+                });
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        ((MainActivity) activity).onSectionAttached(
+                getArguments().getInt(ARG_SECTION_NUMBER));
+    }
+
+}
