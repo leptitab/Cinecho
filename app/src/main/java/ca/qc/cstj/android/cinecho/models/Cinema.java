@@ -1,6 +1,8 @@
 package ca.qc.cstj.android.cinecho.models;
 
+
 import com.google.gson.JsonObject;
+
 /**
  * Created by 1240755 on 2014-10-31.
  */

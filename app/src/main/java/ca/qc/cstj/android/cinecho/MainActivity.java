@@ -51,6 +51,8 @@ public class MainActivity extends Activity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
+
+
         fragmentManager.beginTransaction()
                 .replace(R.id.container, CinemaFragment.newInstance(position + 1))
                 .commit();
@@ -63,9 +65,6 @@ public class MainActivity extends Activity
                 break;
             case 2:
                 mTitle = getString(R.string.title_section_film);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section_horaire);
                 break;
         }
     }

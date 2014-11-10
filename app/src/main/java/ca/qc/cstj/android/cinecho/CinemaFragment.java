@@ -26,6 +26,7 @@ import org.apache.http.HttpStatus;
 import java.util.ArrayList;
 
 import ca.qc.cstj.android.cinecho.adapters.CinemaAdapter;
+import ca.qc.cstj.android.cinecho.adapters.HoraireAdapter;
 import ca.qc.cstj.android.cinecho.models.Cinema;
 import ca.qc.cstj.android.cinecho.services.ServiceURI;
 
@@ -87,7 +88,7 @@ public class CinemaFragment extends Fragment {
 
         loadCinemas();
         //LE LISTENER EST L'EVENT QUI PREND LE CLICK DANS LE MENU POUR FAIRE L'ACTION
-        /*
+
         lstCinema.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -96,14 +97,12 @@ public class CinemaFragment extends Fragment {
                 String href = cinemaAdapter.getItem(position).getHref();
 
                 FragmentTransaction transaction =  getFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,DetailCinemaFragment.newInstance(href))
+                transaction.replace(R.id.container,HoraireFragment.newInstance(href))
                         .addToBackStack("");
                 transaction.commit();
 
             }
         });
-        */
-
     }
 
     private void loadCinemas()

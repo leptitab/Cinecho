@@ -12,25 +12,23 @@ import ca.qc.cstj.android.cinecho.helpers.DateParser;
  */
 public class Horaire {
 
+    private String href;
     private DateTime dateHeure;
     private Film film;
-    private String cinemaHref;
 
     public Horaire(JsonObject jsonObject)
     {
+        href = jsonObject.getAsJsonPrimitive("href").getAsString();
         dateHeure = DateParser.ParseIso(jsonObject.getAsJsonPrimitive("dateHeure").getAsString());
         film = new Film(jsonObject.getAsJsonObject("film"));
-        cinemaHref = jsonObject.getAsJsonPrimitive("cinema").getAsString();
     }
 
-    public JsonObject toJson() {
-        JsonObject json = new JsonObject();
+    public String getHref() {
+        return href;
+    }
 
-        /*json.addProperty("dateHeure",dateHeure);
-        json.addProperty("film",film);
-        json.addProperty("cinema",cinema);*/
-
-        return json;
+    public void setHref(String href) {
+        this.href = href;
     }
 
     public Film getFilm() {
@@ -39,14 +37,6 @@ public class Horaire {
 
     public void setFilm(Film film) {
         this.film = film;
-    }
-
-    public String getCinemaHref() {
-        return cinemaHref;
-    }
-
-    public void setCinemaHref(String cinemaHref) {
-        this.cinemaHref = cinemaHref;
     }
 
     public DateTime getDateHeure() {
