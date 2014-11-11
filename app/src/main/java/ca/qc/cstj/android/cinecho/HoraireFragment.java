@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.JsonArray;
@@ -48,6 +49,9 @@ public class HoraireFragment extends Fragment{
     private TextView txtNomFilm;
     private Horaire horaire;
     private OnFragmentInteractionListener mListener;
+    private HoraireAdapter horaireAdapter;
+    private ListView lstHoraire;
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.
@@ -75,7 +79,7 @@ public class HoraireFragment extends Fragment{
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_horaire, container, false);
 
-        txtNomFilm = (TextView)view.findViewById(R.id.nomFilm);
+        //txtNomFilm = (TextView)view.findViewById(R.id.nomFilm);
         return view;
     }
 
@@ -86,18 +90,25 @@ public class HoraireFragment extends Fragment{
         progressDialog = ProgressDialog.show(getActivity(), "Cinéma en folie", "En chargement...", true, false);
         Ion.with(getActivity())
                 .load(href)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
+                .asJsonArray()
+                .withResponse()
+                .setCallback(new FutureCallback<Response<JsonArray>>() {
                     @Override
-                    public void onCompleted(Exception e, JsonObject jsonObject) {
+                    public void onCompleted(Exception e, Response<JsonArray> jsonArrayResponse) {
 
-                        if (jsonObject != null) {
-                            Horaire horaires = new Horaire(jsonObject);
-                            txtNomFilm.setText(/*horaire.getFilm().getTitre()*/"Le nombre 23");
-                            progressDialog.dismiss();
-                        } else {
-                            progressDialog.dismiss();
+                        if(jsonArrayResponse.getHeaders().getResponseCode() == HttpStatus.SC_OK) {
+                            ArrayList<Horaire> horaires = new ArrayList<Horaire>();
+                            JsonArray jsonArray = jsonArrayResponse.getResult();
+                            for (JsonElement element : jsonArray) {
+                                horaires.add(new Horaire(element.getAsJsonObject()));
+                            }
+                            //horaireAdapter = new HoraireAdapter(getActivity(), R.layout., horaires);
+                            //lstHoraire.setAdapter(horaireAdapter);
                         }
+                        else {
+                            ArrayList<Horaire> horaires = new ArrayList<Horaire>();
+                        }
+                        progressDialog.dismiss();
                     }
                 });
     }
