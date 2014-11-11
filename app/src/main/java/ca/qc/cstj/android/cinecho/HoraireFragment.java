@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import ca.qc.cstj.android.cinecho.adapters.CinemaAdapter;
 import ca.qc.cstj.android.cinecho.adapters.HoraireAdapter;
 import ca.qc.cstj.android.cinecho.models.Cinema;
+import ca.qc.cstj.android.cinecho.models.Film;
 import ca.qc.cstj.android.cinecho.models.Horaire;
 import ca.qc.cstj.android.cinecho.services.ServiceURI;
 
@@ -39,13 +40,11 @@ public class HoraireFragment extends Fragment{
      * The fragment argument representing the section number for this
      * fragment.
      */
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    //private static final String ARG_SECTION_NUMBER = "section_number";
     private static final String ARG_HREF = "href";
 
     private String href;
-    private ListView lstHoraire;
     private ProgressDialog progressDialog;
-    private HoraireAdapter horaireAdapter;
     private TextView txtNomFilm;
     private Horaire horaire;
     private OnFragmentInteractionListener mListener;
@@ -69,16 +68,15 @@ public class HoraireFragment extends Fragment{
         if (getArguments() != null) {
             href = getArguments().getString(ARG_HREF);
         }
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_horaire, container, false);
+        View view = inflater.inflate(R.layout.fragment_horaire, container, false);
 
-        txtNomFilm = (TextView) rootView.findViewById(R.id.nomFilm);
-        return rootView;
+        txtNomFilm = (TextView)view.findViewById(R.id.nomFilm);
+        return view;
     }
 
     @Override
@@ -93,14 +91,21 @@ public class HoraireFragment extends Fragment{
                     @Override
                     public void onCompleted(Exception e, JsonObject jsonObject) {
 
-                        horaire = new Horaire(jsonObject);
-
-                        txtNomFilm.setText(horaire.getFilm().getTitre());
-                        progressDialog.dismiss();
-
+                        if (jsonObject != null) {
+                            Horaire horaires = new Horaire(jsonObject);
+                            txtNomFilm.setText(/*horaire.getFilm().getTitre()*/"Le nombre 23");
+                            progressDialog.dismiss();
+                        } else {
+                            progressDialog.dismiss();
+                        }
                     }
-
                 });
+    }
+
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
     }
 
     @Override
@@ -112,6 +117,12 @@ public class HoraireFragment extends Fragment{
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     public interface OnFragmentInteractionListener {

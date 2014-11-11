@@ -30,9 +30,10 @@ import java.util.ArrayList;
 import ca.qc.cstj.android.cinecho.adapters.CinemaAdapter;
 import ca.qc.cstj.android.cinecho.adapters.HoraireAdapter;
 import ca.qc.cstj.android.cinecho.models.Cinema;
+import ca.qc.cstj.android.cinecho.models.Film;
 import ca.qc.cstj.android.cinecho.services.ServiceURI;
 
-public class CinemaFragment extends Fragment {
+public class FilmFragment extends Fragment {
 
     /**
      * The fragment argument representing the section number for this
@@ -40,29 +41,25 @@ public class CinemaFragment extends Fragment {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    private ListView lstCinema;
-    private ProgressDialog progressDialog;
-    private CinemaAdapter cinemaAdapter;
-
 
     /**
      * Returns a new instance of this fragment for the given section
      * number.
      */
-    public static CinemaFragment newInstance(int sectionNumber) {
-        CinemaFragment fragment = new CinemaFragment();
+    public static FilmFragment newInstance(int sectionNumber) {
+        FilmFragment fragment = new FilmFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public CinemaFragment() { }
+    public FilmFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_cinema, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_film, container, false);
 
         return rootView;
     }
@@ -71,7 +68,7 @@ public class CinemaFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        lstCinema = (ListView) getActivity().findViewById(R.id.list_cinema);
+        //lstCinema = (ListView) getActivity().findViewById(R.id.list_cinema);
 
         /*Ion.with(getActivity())
            .load(ServicesURI.EMPLOYES_SERVICE_URI)
@@ -88,7 +85,7 @@ public class CinemaFragment extends Fragment {
                }
         });*/
 
-        loadCinemas();
+        /*loadCinemas();
         //LE LISTENER EST L'EVENT QUI PREND LE CLICK DANS LE MENU POUR FAIRE L'ACTION
 
         lstCinema.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,12 +100,12 @@ public class CinemaFragment extends Fragment {
                 transaction.commit();
 
             }
-        });
+        });*/
     }
 
-    private void loadCinemas()
+    /*private void loadCinemas()
     {
-        progressDialog = ProgressDialog.show(getActivity(),"Cinecho","Chargement en cours...",true,false);
+        progressDialog = ProgressDialog.show(getActivity(),"Cinecho","LOADING, BITCH!",true,false);
 
         Ion.with(getActivity())
                 .load(ServiceURI.CINEMA_SERVICE_URI)
@@ -118,7 +115,7 @@ public class CinemaFragment extends Fragment {
                     @Override
                     public void onCompleted(Exception e, Response<JsonArray> jsonArrayResponse) {
 
-                      if(jsonArrayResponse.getHeaders().getResponseCode() == HttpStatus.SC_OK) {
+                        if(jsonArrayResponse.getHeaders().getResponseCode() == HttpStatus.SC_OK) {
                             ArrayList<Cinema> cinemas = new ArrayList<Cinema>();
                             JsonArray jsonArray = jsonArrayResponse.getResult();
                             for (JsonElement element : jsonArray) {
@@ -133,7 +130,7 @@ public class CinemaFragment extends Fragment {
                         progressDialog.dismiss();
                     }
                 });
-    }
+    }*/
 
     @Override
     public void onAttach(Activity activity) {
@@ -143,3 +140,4 @@ public class CinemaFragment extends Fragment {
     }
 
 }
+

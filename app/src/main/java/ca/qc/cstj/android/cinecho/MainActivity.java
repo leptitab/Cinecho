@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -20,7 +21,7 @@ import android.widget.TextView;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, HoraireFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -52,10 +53,19 @@ public class MainActivity extends Activity
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
 
-
-        fragmentManager.beginTransaction()
+        if(position == 0){
+                fragmentManager.beginTransaction()
                 .replace(R.id.container, CinemaFragment.newInstance(position + 1))
                 .commit();
+        }
+        else if(position == 1){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, FilmFragment.newInstance(position + 1))
+                    .commit();
+
+        }
+
+
     }
 //Les sections se trouvent dans res/values/strings
     public void onSectionAttached(int number) {
@@ -65,6 +75,9 @@ public class MainActivity extends Activity
                 break;
             case 2:
                 mTitle = getString(R.string.title_section_film);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section_horaire);
                 break;
         }
     }
@@ -100,6 +113,11 @@ public class MainActivity extends Activity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     /**

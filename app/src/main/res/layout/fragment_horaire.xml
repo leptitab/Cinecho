@@ -1,23 +1,32 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-        <TextView
-            android:id="@+id/nomFilm"
-            android:layout_height="wrap_content"
+        <GridLayout
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_row="1"
-            android:layout_column="0"
-            android:layout_columnSpan="2"
-            android:ems="12" />
-        />
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/list_horaires">
-        </ListView>
+            android:layout_height="match_parent"
+            android:rowCount="2"
+            android:columnCount="1"
+            android:useDefaultMargins="true"
+            tools:context="ca.qc.cstj.android.cinecho.HoraireFragment">
+
+           <TextView
+                android:id="@+id/nomFilm"
+                android:layout_row="0"
+                android:layout_column="0"
+                android:layout_columnSpan="1"
+                android:text="@string/nomFilm"
+                android:layout_marginLeft="10dp" />
+            <TextView
+                android:id="@+id/horaires"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:layout_columnSpan="1"
+                android:text="@string/horaires"
+                android:layout_marginLeft="10dp" />
+        </GridLayout>
     </ScrollView>
 </LinearLayout>
