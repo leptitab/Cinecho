@@ -18,7 +18,8 @@ public class Horaire {
     public Horaire(JsonObject jsonObject)
     {
         dateHeure = DateParser.ParseIso(jsonObject.getAsJsonPrimitive("dateHeure").getAsString());
-        //filmHref = jsonObject.getAsJsonObject("film/href").getAsString();
+        JsonObject film = jsonObject.getAsJsonObject("film");
+        filmHref = film.getAsJsonPrimitive("href").getAsString();
     }
 
     public String getFilmHref() {
