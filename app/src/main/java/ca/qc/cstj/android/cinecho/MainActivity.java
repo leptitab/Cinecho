@@ -21,7 +21,8 @@ import android.widget.TextView;
 
 
 public class MainActivity extends Activity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks, HoraireFragment.OnFragmentInteractionListener {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        HoraireFragment.OnFragmentInteractionListener {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -75,9 +76,6 @@ public class MainActivity extends Activity
                 break;
             case 2:
                 mTitle = getString(R.string.title_section_film);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section_horaire);
                 break;
         }
     }

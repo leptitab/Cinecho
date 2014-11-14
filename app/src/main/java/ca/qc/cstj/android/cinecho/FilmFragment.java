@@ -27,9 +27,7 @@ import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
 
-import ca.qc.cstj.android.cinecho.adapters.CinemaAdapter;
-import ca.qc.cstj.android.cinecho.adapters.HoraireAdapter;
-import ca.qc.cstj.android.cinecho.models.Cinema;
+import ca.qc.cstj.android.cinecho.adapters.FilmAdapter;
 import ca.qc.cstj.android.cinecho.models.Film;
 import ca.qc.cstj.android.cinecho.services.ServiceURI;
 
@@ -41,6 +39,9 @@ public class FilmFragment extends Fragment {
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
 
+    private ListView lstFilm;
+    private ProgressDialog progressDialog;
+    private FilmAdapter filmAdapter;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -68,47 +69,33 @@ public class FilmFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        //lstCinema = (ListView) getActivity().findViewById(R.id.list_cinema);
+        lstFilm = (ListView) getActivity().findViewById(R.id.list_film);
 
-        /*Ion.with(getActivity())
-           .load(ServicesURI.EMPLOYES_SERVICE_URI)
-           .asJsonArray()
-           .setCallback(new FutureCallback<JsonArray>() {
-               @Override
-               public void onCompleted(Exception e, JsonArray jsonArray) {
 
-                   employeAdapter = new OldEmployeAdapter(getActivity(),
-                                                        getActivity().getLayoutInflater(),jsonArray);
-                   lstEmploye.setAdapter(employeAdapter);
-                   progressDialog.dismiss();
-
-               }
-        });*/
-
-        /*loadCinemas();
+        loadFilms();
         //LE LISTENER EST L'EVENT QUI PREND LE CLICK DANS LE MENU POUR FAIRE L'ACTION
 
-        lstCinema.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lstFilm.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String href = cinemaAdapter.getItem(position).getHref() + "/horaires";
+                String href = filmAdapter.getItem(position).getHref() + "/" + id;
                 FragmentTransaction transaction =  getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container,HoraireFragment.newInstance(href))
                         .addToBackStack("");
                 transaction.commit();
 
             }
-        });*/
+        });
     }
 
-    /*private void loadCinemas()
+    private void loadFilms()
     {
-        progressDialog = ProgressDialog.show(getActivity(),"Cinecho","LOADING, BITCH!",true,false);
+        progressDialog = ProgressDialog.show(getActivity(),"Cinecho","Chargement en cours",true,false);
 
         Ion.with(getActivity())
-                .load(ServiceURI.CINEMA_SERVICE_URI)
+                .load(ServiceURI.Film_SERVICE_URI)
                 .asJsonArray()
                 .withResponse()
                 .setCallback(new FutureCallback<Response<JsonArray>>() {
@@ -116,21 +103,21 @@ public class FilmFragment extends Fragment {
                     public void onCompleted(Exception e, Response<JsonArray> jsonArrayResponse) {
 
                         if(jsonArrayResponse.getHeaders().getResponseCode() == HttpStatus.SC_OK) {
-                            ArrayList<Cinema> cinemas = new ArrayList<Cinema>();
+                            ArrayList<Film> films = new ArrayList<Film>();
                             JsonArray jsonArray = jsonArrayResponse.getResult();
                             for (JsonElement element : jsonArray) {
-                                cinemas.add(new Cinema(element.getAsJsonObject()));
+                                films.add(new Film(element.getAsJsonObject()));
                             }
-                            cinemaAdapter = new CinemaAdapter(getActivity(), android.R.layout.simple_list_item_1, cinemas);
-                            lstCinema.setAdapter(cinemaAdapter);
+                            filmAdapter = new FilmAdapter(getActivity(), android.R.layout.simple_list_item_1, films);
+                            lstFilm.setAdapter(filmAdapter);
                         }
                         else {
-                            ArrayList<Cinema> cinemas = new ArrayList<Cinema>();
+                            ArrayList<Film> films = new ArrayList<Film>();
                         }
                         progressDialog.dismiss();
                     }
                 });
-    }*/
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -140,4 +127,3 @@ public class FilmFragment extends Fragment {
     }
 
 }
-
