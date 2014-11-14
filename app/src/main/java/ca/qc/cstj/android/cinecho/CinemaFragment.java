@@ -26,6 +26,7 @@ import com.koushikdutta.ion.Response;
 import org.apache.http.HttpStatus;
 
 import java.util.ArrayList;
+import java.util.TimeZone;
 
 import ca.qc.cstj.android.cinecho.adapters.CinemaAdapter;
 import ca.qc.cstj.android.cinecho.adapters.HoraireAdapter;
@@ -96,7 +97,7 @@ public class CinemaFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String href = cinemaAdapter.getItem(position).getHref() + "/horaires";
+                String href = cinemaAdapter.getItem(position).getHref() + "/films/";
                 FragmentTransaction transaction =  getFragmentManager().beginTransaction();
                 transaction.replace(R.id.container,HoraireFragment.newInstance(href))
                         .addToBackStack("");

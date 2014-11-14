@@ -19,6 +19,7 @@ public class Film {
 
     public Film(JsonObject jsonObject) {
         href = jsonObject.getAsJsonPrimitive("href").getAsString();
+        /* if */
         titre = jsonObject.getAsJsonPrimitive("titre").getAsString();
         pays = jsonObject.getAsJsonPrimitive("pays").getAsString();
         genre = jsonObject.getAsJsonPrimitive("genre").getAsString();

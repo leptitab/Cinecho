@@ -47,7 +47,7 @@ public class HoraireFragment extends Fragment{
     private String href;
     private ProgressDialog progressDialog;
     private TextView txtNomFilm;
-    private Horaire horaire;
+    private Horaire horaires;
     private OnFragmentInteractionListener mListener;
     private HoraireAdapter horaireAdapter;
     private ListView lstHoraire;
@@ -97,13 +97,13 @@ public class HoraireFragment extends Fragment{
                     public void onCompleted(Exception e, Response<JsonArray> jsonArrayResponse) {
 
                         if(jsonArrayResponse.getHeaders().getResponseCode() == HttpStatus.SC_OK) {
-                            ArrayList<Horaire> horaires = new ArrayList<Horaire>();
+                            ArrayList<Film> films = new ArrayList<Film>();
                             JsonArray jsonArray = jsonArrayResponse.getResult();
                             for (JsonElement element : jsonArray) {
-                                horaires.add(new Horaire(element.getAsJsonObject()));
+                                films.add(new Film(element.getAsJsonObject()));
                             }
-                            //horaireAdapter = new HoraireAdapter(getActivity(), R.layout., horaires);
-                            //lstHoraire.setAdapter(horaireAdapter);
+                            horaireAdapter = new HoraireAdapter(getActivity(), getActivity().getLayoutInflater() , films);
+                            lstHoraire.setAdapter(horaireAdapter);
                         }
                         else {
                             ArrayList<Horaire> horaires = new ArrayList<Horaire>();
