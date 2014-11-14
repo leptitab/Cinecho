@@ -124,7 +124,7 @@ public class CinemaFragment extends Fragment {
                             for (JsonElement element : jsonArray) {
                                 cinemas.add(new Cinema(element.getAsJsonObject()));
                             }
-                            cinemaAdapter = new CinemaAdapter(getActivity(), android.R.layout.simple_list_item_1, cinemas);
+                            cinemaAdapter = new CinemaAdapter(getActivity(), getActivity().getLayoutInflater(), cinemas);
                             lstCinema.setAdapter(cinemaAdapter);
                         }
                         else {
