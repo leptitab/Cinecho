@@ -70,9 +70,8 @@ public class HoraireAdapter extends ArrayAdapter<Film> {
         Film film = getItem(position);
 
         /* rappel /*/
-        String var = film.getHref() + "/horaires/-05:00";
         Ion.with(getContext())
-                .load(film.getHref() + "/horaires/-05:00")
+                .load(film.getHref() + "/horaires?timeZone=-05:00")
                 .asJsonObject()
                 .setCallback(new FutureCallback<JsonObject>() {
                     @Override
@@ -88,8 +87,8 @@ public class HoraireAdapter extends ArrayAdapter<Film> {
                         if(horaire.getHeure2() != null)
                             horaireviewHolder.horaire2.setText(horaire.getHeure2().toString());
                         else
-                            horaireviewHolder.horaire2.setText("Aucune représentation");
-                    }
+                            horaireviewHolder.horaire2.setVisibility(View.GONE);
+                        }
 
                 });
         return convertView;
