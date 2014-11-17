@@ -46,11 +46,9 @@ public class HoraireFragment extends Fragment{
 
     private String href;
     private ProgressDialog progressDialog;
-    private TextView txtNomFilm;
-    private Horaire horaires;
     private OnFragmentInteractionListener mListener;
     private HoraireAdapter horaireAdapter;
-    private ListView lstHoraire;
+    private ListView lstFilms;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -87,6 +85,8 @@ public class HoraireFragment extends Fragment{
     public void onStart() {
         super.onStart();
 
+        lstFilms = (ListView) getActivity().findViewById(R.id.lstFilms);
+
         progressDialog = ProgressDialog.show(getActivity(), "Cinéma en folie", "En chargement...", true, false);
         Ion.with(getActivity())
                 .load(href)
@@ -103,10 +103,10 @@ public class HoraireFragment extends Fragment{
                                 films.add(new Film(element.getAsJsonObject()));
                             }
                             horaireAdapter = new HoraireAdapter(getActivity(), getActivity().getLayoutInflater() , films);
-                            lstHoraire.setAdapter(horaireAdapter);
+                            lstFilms.setAdapter(horaireAdapter);
                         }
                         else {
-                            ArrayList<Horaire> horaires = new ArrayList<Horaire>();
+                            ArrayList<Film> Films = new ArrayList<Film>();
                         }
                         progressDialog.dismiss();
                     }

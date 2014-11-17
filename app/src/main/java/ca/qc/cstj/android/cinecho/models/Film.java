@@ -19,14 +19,20 @@ public class Film {
 
     public Film(JsonObject jsonObject) {
         href = jsonObject.getAsJsonPrimitive("href").getAsString();
-        /* if */
-        titre = jsonObject.getAsJsonPrimitive("titre").getAsString();
-        pays = jsonObject.getAsJsonPrimitive("pays").getAsString();
-        genre = jsonObject.getAsJsonPrimitive("genre").getAsString();
-        classe = jsonObject.getAsJsonPrimitive("classe").getAsString();
-        duree = jsonObject.getAsJsonPrimitive("duree").getAsInt();
-        realisateur = jsonObject.getAsJsonPrimitive("realisateur").getAsString();
-        imageUrl = jsonObject.getAsJsonPrimitive("imageUrl").getAsString();
+        if(jsonObject.has("titre"))
+            titre = jsonObject.getAsJsonPrimitive("titre").getAsString();
+        if(jsonObject.has("pays"))
+            pays = jsonObject.getAsJsonPrimitive("pays").getAsString();
+        if(jsonObject.has("genre"))
+            genre = jsonObject.getAsJsonPrimitive("genre").getAsString();
+        if(jsonObject.has("classe"))
+            classe = jsonObject.getAsJsonPrimitive("classe").getAsString();
+        if(jsonObject.has("duree"))
+            duree = jsonObject.getAsJsonPrimitive("duree").getAsInt();
+        if(jsonObject.has("realisateur"))
+            realisateur = jsonObject.getAsJsonPrimitive("realisateur").getAsString();
+        if(jsonObject.has("imageUrl"))
+            imageUrl = jsonObject.getAsJsonPrimitive("imageUrl").getAsString();
     }
 
     public JsonObject toJson() {

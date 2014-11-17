@@ -1,6 +1,7 @@
 package ca.qc.cstj.android.cinecho.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
@@ -30,6 +32,11 @@ public class HoraireAdapter extends ArrayAdapter<Film> {
     private LayoutInflater mInflater;
     private ArrayList<Horaire> horaires;
     private ArrayList<Film> films;
+    private Horaire horaire;
+
+    private TextView nomFilm;
+    private TextView horaire1;
+    private TextView horaire2;
 
     public HoraireAdapter(Context context, LayoutInflater layoutInflater, ArrayList<Film> listeFilm) {
         super(context, R.layout.item_horaire, listeFilm);
@@ -50,7 +57,8 @@ public class HoraireAdapter extends ArrayAdapter<Film> {
             convertView = mInflater.inflate(R.layout.item_horaire, null, true);
             horaireviewHolder = new HoraireViewHolder();
             horaireviewHolder.nomFilm = (TextView) convertView.findViewById(R.id.nomFilm);
-            horaireviewHolder.horaire = (TextView) convertView.findViewById(R.id.horaires);
+            horaireviewHolder.horaire1 = (TextView) convertView.findViewById(R.id.horaires);
+            horaireviewHolder.horaire2 = (TextView) convertView.findViewById(R.id.horaires2);
 
             convertView.setTag(horaireviewHolder);
 
@@ -62,38 +70,34 @@ public class HoraireAdapter extends ArrayAdapter<Film> {
         Film film = getItem(position);
 
         /* rappel /*/
-        /*Ion.with(getContext())
-                .load(film.getHref() + "/horaires/"+ TimeZone.getTimeZone("GMT"))
+        String var = film.getHref() + "/horaires/-05:00";
+        Ion.with(getContext())
+                .load(film.getHref() + "/horaires/-05:00")
                 .asJsonObject()
-                .withResponse()
-                .setCallback(new FutureCallback<Response<JsonArray>>() {
+                .setCallback(new FutureCallback<JsonObject>() {
                     @Override
-                    public void onCompleted(Exception e, Response<JsonArray> jsonArrayResponse) {
-                        if(jsonArrayResponse.getHeaders().getResponseCode() == HttpStatus.SC_OK) {
-                             jsonArray = jsonArrayResponse.getResult();
+                    public void onCompleted(Exception e, JsonObject jsonObject) {
+                        horaire = new Horaire(jsonObject);
 
-                            if (jsonArray.size() > 0) {
-                                Horaire horaireContenu = new Horaire(jsonArray.get(0).getAsJsonObject().getas);
-                                horaireviewHolder.horaire.setText(horaireContenu.getDateHeure().toString());
-                            }
-                            if (jsonArray.size() > 1)
-                            {
-                                Horaire horaireContenu = new Horaire(jsonArray.get(1).getAsJsonObject());
-                                horaireviewHolder.horaire2.setText(horaireContenu.getDateHeure().toString());
-                            }
-
-                        }
-                        else {
-                            // Erreur 404
-                        }
+                        /* set value */
+                        horaireviewHolder.nomFilm.setText(horaire.getNomFIlm());
+                        if(horaire.getHeure1() != null)
+                            horaireviewHolder.horaire1.setText(horaire.getHeure1().toString());
+                        else
+                            horaireviewHolder.horaire1.setText("Aucune représentation");
+                        if(horaire.getHeure2() != null)
+                            horaireviewHolder.horaire2.setText(horaire.getHeure2().toString());
+                        else
+                            horaireviewHolder.horaire2.setText("Aucune représentation");
                     }
-                });*/
+
+                });
         return convertView;
     }
 
     private static class HoraireViewHolder {
         private TextView nomFilm;
-        private TextView horaire;
+        private TextView horaire1;
         private TextView horaire2;
     }
 
