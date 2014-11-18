@@ -22,7 +22,8 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        HoraireFragment.OnFragmentInteractionListener {
+        HoraireFragment.OnFragmentInteractionListener,
+        DetailFilmFragment.OnFragmentInteractionListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.

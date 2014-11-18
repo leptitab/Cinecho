@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,9 +22,13 @@ import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 
+import org.w3c.dom.Comment;
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import ca.qc.cstj.android.cinecho.helpers.DateParser;
+import ca.qc.cstj.android.cinecho.models.Commentaire;
 import ca.qc.cstj.android.cinecho.models.Film;
 import ca.qc.cstj.android.cinecho.services.ServiceURI;
 
@@ -44,6 +49,11 @@ public class DetailFilmFragment extends Fragment {
     private TextView txtClasse;
     private TextView txtDuree;
     private TextView txtRealisateur;
+    private Button btnSauvegarder;
+
+    private EditText txtAuteur;
+    private EditText txtCommentaireAjoute;
+    private EditText txtNote;
 
     private ProgressDialog progressDialog;
 
@@ -92,24 +102,29 @@ public class DetailFilmFragment extends Fragment {
         txtGenre = (TextView) view.findViewById(R.id.txtGenre);
         txtDuree = (TextView)view.findViewById(R.id.txtDuree);
         txtRealisateur = (TextView)view.findViewById(R.id.txtRealisateur);
+        btnSauvegarder = (Button)view.findViewById(R.id.btnAjouter);
+
+        txtAuteur = (EditText) view.findViewById(R.id.txtAuteur);
+        txtCommentaireAjoute = (EditText) view.findViewById(R.id.txtCommentaireAjoute);
+        txtNote = (EditText) view.findViewById(R.id.txtNote);
+
+
 
         return view;
     }
 
-    /*private void sauvegarderEmploye() {
+    private void ajouterCommentaire() {
 
-        Employe employe = new Employe();
+        Commentaire commentaire = new Commentaire();
 
-        employe.setPrenom(txtPrenom.getText().toString());
-        employe.setNom(txtNom.getText().toString());
-        employe.setDateEmbauche(DateParser.Parse(txtDateEmbauche.getText().toString()));
-        employe.setDateEmbauche(DateParser.Parse(txtDateNaissance.getText().toString()));
-        employe.setDepartement((Departement)cboDepartement.getSelectedItem());
+        commentaire.setAuteur(txtAuteur.getText().toString());
+        commentaire.setTexte(txtCommentaireAjoute.getText().toString());
+        commentaire.setNote(Integer.parseInt(txtNote.getText().toString()));
 
-        JsonObject body = employe.toJson();
+        JsonObject body = commentaire.toJson();
 
         Ion.with(getActivity())
-                .load("PATCH",href)
+                .load("POST",href)
                 .addHeader("Content-Type","application/json")
                 .setJsonObjectBody(body)
                 .asJsonObject()
@@ -117,11 +132,10 @@ public class DetailFilmFragment extends Fragment {
                     @Override
                     public void onCompleted(Exception e, JsonObject jsonObject) {
                         Toast.makeText(getActivity().getApplicationContext(),
-                                "Enregistrement réussi", Toast.LENGTH_LONG).show();
+                            "Enregistrement réussi", Toast.LENGTH_LONG).show();
                     }
                 });
-
-    }*/
+    }
 
     @Override
     public void onStart() {
@@ -137,12 +151,19 @@ public class DetailFilmFragment extends Fragment {
 
                         film = new Film(jsonObject);
 
+                        ImageView ionImage = (ImageView)getActivity().findViewById(R.id.imgFilm);
+                        Ion.with(ionImage).placeholder(R.drawable.ic_launcher).load(film.getImageUrl());
+
                         txtTitre.setText(film.getTitre());
                         txtPays.setText(film.getPays());
                         txtGenre.setText(film.getGenre());
                         txtClasse.setText(film.getClasse());
                         txtRealisateur.setText(film.getRealisateur());
-                        txtDuree.setText(film.getDuree());
+
+                        String temps = String.valueOf((film.getDuree() / 60));
+
+                        txtDuree.setText(temps);
+
                         progressDialog.dismiss();
 
                     }

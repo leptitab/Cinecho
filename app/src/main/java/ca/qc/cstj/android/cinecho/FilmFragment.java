@@ -80,9 +80,9 @@ public class FilmFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String href = filmAdapter.getItem(position).getHref() + "/" + id;
+                String href = filmAdapter.getItem(position).getHref();
                 FragmentTransaction transaction =  getFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,HoraireFragment.newInstance(href))
+                transaction.replace(R.id.container,DetailFilmFragment.newInstance(href))
                         .addToBackStack("");
                 transaction.commit();
 
