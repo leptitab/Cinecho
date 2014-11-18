@@ -111,6 +111,20 @@ public class HoraireFragment extends Fragment{
                         progressDialog.dismiss();
                     }
                 });
+
+        lstFilms.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
+                FragmentTransaction transaction =  getFragmentManager().beginTransaction();
+                transaction.replace(R.id.container,CinemaFragment.newInstance(position))
+                        .addToBackStack("");
+                transaction.commit();
+
+            }
+        });
     }
 
     public void onButtonPressed(Uri uri) {

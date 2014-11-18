@@ -8,6 +8,7 @@ import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import ca.qc.cstj.android.cinecho.helpers.DateParser;
@@ -26,23 +27,18 @@ public class Horaire {
         if(jsonObject != null) {
             if(jsonObject.has("listHoraires")) {
                 JsonArray array = jsonObject.getAsJsonArray("listHoraires");
-                // faire la boucle
-                /*ArrayList<DateTime> presentation = new ArrayList<DateTime>();
-                for (JsonElement element : array) {
-                    presentation.add(new DateTime(DateParser.ParseIso(jsonObject.getAsJsonPrimitive("dateHeure").getAsString())));
-                }*/
-                String var = array.get(0).getAsJsonObject().getAsJsonPrimitive("dateHeure").toString();
-                if (array.size() > 0)
-                    heure1 = new DateTime(array.get(0).getAsJsonObject().getAsJsonPrimitive("dateHeure").getAsString());
-                if (array.size() > 1)
-                    heure2 = new DateTime(array.get(1).getAsJsonObject().getAsJsonPrimitive("dateHeure").getAsString());
+                if(array.size() != 0) {
+                    String var = array.get(0).getAsJsonObject().getAsJsonPrimitive("dateHeure").toString();
+                    if (array.size() > 0)
+                        heure1 = new DateTime(array.get(0).getAsJsonObject().getAsJsonPrimitive("dateHeure").getAsString());
+                    if (array.size() > 1)
+                        heure2 = new DateTime(array.get(1).getAsJsonObject().getAsJsonPrimitive("dateHeure").getAsString());
+                }
             }
-            nomFIlm = jsonObject.getAsJsonPrimitive("titre").getAsString();
-        }else{
-            nomFIlm = "Aucun titre";
         }
-
-
+        if(jsonObject != null && jsonObject.has("titre")) {
+            nomFIlm = jsonObject.getAsJsonPrimitive("titre").getAsString();
+        }
     }
 
 
@@ -68,5 +64,9 @@ public class Horaire {
 
     public void setNomFIlm(String nomFIlm) {
         this.nomFIlm = nomFIlm;
+    }
+
+    public String formatageDate(DateTime date){
+        return date.toString("yyyy-MM-dd HH:mm");
     }
 }
