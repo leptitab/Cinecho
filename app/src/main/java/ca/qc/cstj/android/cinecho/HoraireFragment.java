@@ -26,6 +26,7 @@ import org.apache.http.HttpStatus;
 import java.util.ArrayList;
 
 import ca.qc.cstj.android.cinecho.adapters.CinemaAdapter;
+import ca.qc.cstj.android.cinecho.adapters.FilmAdapter;
 import ca.qc.cstj.android.cinecho.adapters.HoraireAdapter;
 import ca.qc.cstj.android.cinecho.models.Cinema;
 import ca.qc.cstj.android.cinecho.models.Film;
@@ -48,7 +49,7 @@ public class HoraireFragment extends Fragment{
     private ProgressDialog progressDialog;
     private OnFragmentInteractionListener mListener;
     private HoraireAdapter horaireAdapter;
-    private ListView lstFilms = (ListView) getActivity().findViewById(R.id.lstFilms);
+    private ListView lstFilms;
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -84,7 +85,7 @@ public class HoraireFragment extends Fragment{
     @Override
     public void onStart() {
         super.onStart();
-
+        lstFilms = (ListView) getActivity().findViewById(R.id.lstFilms);
         progressDialog = ProgressDialog.show(getActivity(), "Cinéma en folie", "En chargement...", true, false);
         Ion.with(getActivity())
                 .load(href)
@@ -115,9 +116,11 @@ public class HoraireFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                String href = horaireAdapter.getItem(position).getHref();
+                horaireAdapter.getHref();
+
+
                 FragmentTransaction transaction =  getFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,DetailFilmFragment.newInstance(href))
+                transaction.replace(R.id.container,DetailFilmFragment.newInstance(horaireAdapter.getHref()))
                         .addToBackStack("");
                 transaction.commit();
 

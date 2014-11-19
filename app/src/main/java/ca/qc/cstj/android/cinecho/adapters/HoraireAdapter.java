@@ -90,12 +90,18 @@ public class HoraireAdapter extends ArrayAdapter<Film> {
                             horaireviewHolder.nomFilm.setText(horaire.getNomFIlm());
                             horaireviewHolder.nomFilm.setTypeface(null, Typeface.BOLD);
                         }
+
                     }
 
                 });
             progressDialog.dismiss();
         return convertView;
     }
+
+    public String getHref()
+    {
+        return horaire.getHref();
+    };
 
     private static class HoraireViewHolder {
         private TextView nomFilm;

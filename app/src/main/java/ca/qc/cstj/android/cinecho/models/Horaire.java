@@ -21,7 +21,12 @@ public class Horaire {
     private DateTime heure1;
     private DateTime heure2;
     private String nomFIlm;
-    private String hrefFilm;
+
+    public String getHref() {
+        return href;
+    }
+
+    private String href;
 
     public Horaire(JsonObject jsonObject)
     {
@@ -40,8 +45,8 @@ public class Horaire {
         if(jsonObject != null && jsonObject.has("titre")) {
             nomFIlm = jsonObject.getAsJsonPrimitive("titre").getAsString();
         }
-        if(jsonObject !=null && jsonObject.has("hrefFilm")) {
-            hrefFilm = jsonObject.getAsJsonPrimitive("hrefFilm").getAsString();
+        if(jsonObject !=null && jsonObject.has("href")) {
+            href = jsonObject.getAsJsonPrimitive("href").getAsString();
         }
     }
 
