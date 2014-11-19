@@ -6,12 +6,15 @@ import android.app.ProgressDialog;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +24,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
 
+import org.joda.time.DateTime;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
+import ca.qc.cstj.android.cinecho.adapters.CommentaireAdapter;
 import ca.qc.cstj.android.cinecho.helpers.DateParser;
 import ca.qc.cstj.android.cinecho.models.Commentaire;
 import ca.qc.cstj.android.cinecho.models.Film;
@@ -50,6 +58,7 @@ public class DetailFilmFragment extends Fragment {
     private TextView txtDuree;
     private TextView txtRealisateur;
     private Button btnSauvegarder;
+    private ListView listCommentaire;
 
     private EditText txtAuteur;
     private EditText txtCommentaireAjoute;
@@ -60,6 +69,7 @@ public class DetailFilmFragment extends Fragment {
     private Film film;
 
     private OnFragmentInteractionListener mListener;
+    private CommentaireAdapter commentaireAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -86,7 +96,6 @@ public class DetailFilmFragment extends Fragment {
         if (getArguments() != null) {
             href = getArguments().getString(ARG_HREF);
         }
-
     }
 
     @Override
@@ -108,9 +117,43 @@ public class DetailFilmFragment extends Fragment {
         txtCommentaireAjoute = (EditText) view.findViewById(R.id.txtCommentaireAjoute);
         txtNote = (EditText) view.findViewById(R.id.txtNote);
 
-
+        btnSauvegarder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ajouterCommentaire();
+            }
+        });
 
         return view;
+    }
+
+    private void loadCommentaires()
+    {
+        listCommentaire = (ListView) getActivity().findViewById(R.id.listCommentaires);
+
+        //On affiche les commentaires du film
+        Ion.with(getActivity())
+                .load(href+"/commentaires?order=yes")
+                .asJsonArray()
+                .withResponse()
+                .setCallback(new FutureCallback<Response<JsonArray>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<JsonArray> jsonArrayResponse) {
+                        ArrayList<Commentaire> commentaires = new ArrayList<Commentaire>();
+                        JsonArray jsonArray = jsonArrayResponse.getResult();
+                        for (JsonElement element : jsonArray) {
+                            commentaires.add(new Commentaire(element.getAsJsonObject()));
+                        }
+                        commentaireAdapter = new CommentaireAdapter(getActivity(), getActivity().getLayoutInflater(), commentaires);
+                        listCommentaire.setAdapter(commentaireAdapter);
+                    }
+                });
+    }
+
+    private String getDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        DateTime date = new DateTime();
+        return dateFormat.format(date);
     }
 
     private void ajouterCommentaire() {
@@ -120,21 +163,30 @@ public class DetailFilmFragment extends Fragment {
         commentaire.setAuteur(txtAuteur.getText().toString());
         commentaire.setTexte(txtCommentaireAjoute.getText().toString());
         commentaire.setNote(Integer.parseInt(txtNote.getText().toString()));
+        commentaire.setDateCommentaire(DateParser.Parse(getDateTime()));
+        if (commentaire.getNote() <= 10 || commentaire.getAuteur().equals("")|| commentaire.getTexte().equals("")) {
+            JsonObject body = commentaire.toJson();
 
-        JsonObject body = commentaire.toJson();
-
-        Ion.with(getActivity())
-                .load("POST",href)
-                .addHeader("Content-Type","application/json")
-                .setJsonObjectBody(body)
-                .asJsonObject()
-                .setCallback(new FutureCallback<JsonObject>() {
-                    @Override
-                    public void onCompleted(Exception e, JsonObject jsonObject) {
-                        Toast.makeText(getActivity().getApplicationContext(),
-                            "Enregistrement réussi", Toast.LENGTH_LONG).show();
-                    }
-                });
+            Ion.with(getActivity())
+                    .load(href + "/commentaires")
+                    .addHeader("Content-Type", "application/json")
+                    .setJsonObjectBody(body)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject jsonObject) {
+                            Toast.makeText(getActivity().getApplicationContext(),
+                                    "Commentaire ajouté", Toast.LENGTH_LONG).show();
+                            txtAuteur.setText("");
+                            txtNote.setText("");
+                            txtCommentaireAjoute.setText("");
+                        }
+                    });
+        } else {
+            txtNote.setText("");
+            Toast.makeText(getActivity().getApplicationContext(),
+                    "La note doit être inferieur à 10", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -169,6 +221,7 @@ public class DetailFilmFragment extends Fragment {
                     }
 
                 });
+        loadCommentaires();
 
         progressDialog.dismiss();
     }
