@@ -24,7 +24,6 @@ public class Commentaire {
 
     public Commentaire(JsonObject jsonObject)
     {
-<<<<<<< HEAD
         if(jsonObject!=null) {
             href = jsonObject.getAsJsonPrimitive("href").getAsString();
             auteur = jsonObject.getAsJsonPrimitive("auteur").getAsString();
@@ -32,13 +31,6 @@ public class Commentaire {
             note = jsonObject.getAsJsonPrimitive("note").getAsInt();
             dateCommentaire = DateParser.ParseIso(jsonObject.getAsJsonPrimitive("dateHeure").getAsString());
         }
-=======
-        href = jsonObject.getAsJsonPrimitive("href").getAsString();
-        auteur = jsonObject.getAsJsonPrimitive("auteur").getAsString();
-        texte = jsonObject.getAsJsonPrimitive("texte").getAsString();
-        note = jsonObject.getAsJsonPrimitive("note").getAsInt();
-        dateCommentaire = DateParser.ParseIso(jsonObject.getAsJsonPrimitive("dateHeure").getAsString());
->>>>>>> origin/master
     }
 
     public JsonObject toJson()
