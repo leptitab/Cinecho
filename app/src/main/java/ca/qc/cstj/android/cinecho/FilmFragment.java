@@ -43,6 +43,7 @@ public class FilmFragment extends Fragment {
     private ProgressDialog progressDialog;
     private FilmAdapter filmAdapter;
 
+
     /**
      * Returns a new instance of this fragment for the given section
      * number.

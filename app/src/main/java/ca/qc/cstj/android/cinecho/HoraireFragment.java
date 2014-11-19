@@ -48,7 +48,7 @@ public class HoraireFragment extends Fragment{
     private ProgressDialog progressDialog;
     private OnFragmentInteractionListener mListener;
     private HoraireAdapter horaireAdapter;
-    private ListView lstFilms;
+    private ListView lstFilms = (ListView) getActivity().findViewById(R.id.lstFilms);
 
     /**
      * Returns a new instance of this fragment for the given section
@@ -85,8 +85,6 @@ public class HoraireFragment extends Fragment{
     public void onStart() {
         super.onStart();
 
-        lstFilms = (ListView) getActivity().findViewById(R.id.lstFilms);
-
         progressDialog = ProgressDialog.show(getActivity(), "Cinéma en folie", "En chargement...", true, false);
         Ion.with(getActivity())
                 .load(href)
@@ -117,9 +115,9 @@ public class HoraireFragment extends Fragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-
+                String href = horaireAdapter.getItem(position).getHref();
                 FragmentTransaction transaction =  getFragmentManager().beginTransaction();
-                transaction.replace(R.id.container,CinemaFragment.newInstance(position))
+                transaction.replace(R.id.container,DetailFilmFragment.newInstance(href))
                         .addToBackStack("");
                 transaction.commit();
 
