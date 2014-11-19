@@ -24,11 +24,13 @@ public class Commentaire {
 
     public Commentaire(JsonObject jsonObject)
     {
-        href = jsonObject.getAsJsonPrimitive("href").getAsString();
-        auteur = jsonObject.getAsJsonPrimitive("auteur").getAsString();
-        texte = jsonObject.getAsJsonPrimitive("texte").getAsString();
-        note = jsonObject.getAsJsonPrimitive("note").getAsInt();
-        dateCommentaire = DateParser.ParseIso(jsonObject.getAsJsonPrimitive("dateCommentaire").getAsString());
+        if(jsonObject!=null) {
+            href = jsonObject.getAsJsonPrimitive("href").getAsString();
+            auteur = jsonObject.getAsJsonPrimitive("auteur").getAsString();
+            texte = jsonObject.getAsJsonPrimitive("texte").getAsString();
+            note = jsonObject.getAsJsonPrimitive("note").getAsInt();
+            dateCommentaire = DateParser.ParseIso(jsonObject.getAsJsonPrimitive("dateHeure").getAsString());
+        }
     }
 
     public JsonObject toJson()
@@ -38,7 +40,7 @@ public class Commentaire {
         json.addProperty("auteur",auteur);
         json.addProperty("texte",texte);
         json.addProperty("note",note);
-        json.addProperty("dateCommentaire",dateCommentaire.toString());
+        json.addProperty("dateHeure",dateCommentaire.toString());
 
         return json;
     }

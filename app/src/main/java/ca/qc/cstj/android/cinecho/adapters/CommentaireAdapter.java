@@ -45,7 +45,7 @@ public class CommentaireAdapter extends ArrayAdapter<Commentaire> {
 
         if(convertView == null) {
 
-            convertView = mInflater.inflate(R.layout.listitem_horaire, null, true);
+            convertView = mInflater.inflate(R.layout.listitem_commentaire, null, true);
             commentaireViewHolder = new CommentaireViewHolder();
             commentaireViewHolder.auteurCommentaire = (TextView) convertView.findViewById(R.id.auteurCommentaire);
             commentaireViewHolder.commentaireCommentaire = (TextView) convertView.findViewById(R.id.commentaireCommentaire);
@@ -61,9 +61,9 @@ public class CommentaireAdapter extends ArrayAdapter<Commentaire> {
 
         Commentaire commentaire = getItem(position);
 
-        commentaireViewHolder.noteCommentaire.setText(commentaire.getNote());
-        commentaireViewHolder.dateCommentaire.setText(commentaire.getDateCommentaire().toString());
         commentaireViewHolder.commentaireCommentaire.setText(commentaire.getTexte());
+        commentaireViewHolder.dateCommentaire.setText(commentaire.getDateCommentaire().toString("yyyy-MM-dd HH:mm"));
+        commentaireViewHolder.noteCommentaire.setText(String.valueOf(commentaire.getNote()));
         commentaireViewHolder.auteurCommentaire.setText(commentaire.getAuteur());
 
         return convertView;
