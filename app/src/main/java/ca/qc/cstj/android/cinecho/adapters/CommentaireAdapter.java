@@ -61,6 +61,11 @@ public class CommentaireAdapter extends ArrayAdapter<Commentaire> {
 
         Commentaire commentaire = getItem(position);
 
+<<<<<<< HEAD
+=======
+        commentaireViewHolder.noteCommentaire.setText(String.valueOf(commentaire.getNote()));
+        commentaireViewHolder.dateCommentaire.setText(commentaire.getDateCommentaire().toString());
+>>>>>>> origin/master
         commentaireViewHolder.commentaireCommentaire.setText(commentaire.getTexte());
         commentaireViewHolder.dateCommentaire.setText(commentaire.getDateCommentaire().toString("yyyy-MM-dd HH:mm"));
         commentaireViewHolder.noteCommentaire.setText(String.valueOf(commentaire.getNote()));
